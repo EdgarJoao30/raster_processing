@@ -111,3 +111,4 @@ file <- do.call(rbind, files)
 
 file2<- file[((length(file$x)/3)+1):(2*(length(file$x)/3)),]
 file3<- file[((2*(length(file$x)/3))+1):length(file$x),]
+#this is a test
