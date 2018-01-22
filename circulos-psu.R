@@ -33,6 +33,7 @@ loreto.raster <- raster::mask(x=loreto.raster, mask=eess.shp)
 distList<-loreto.shp@data$NOMBDIST
 distList <- sort(distList)
 for (i in 1:51) {
+  start.time <- Sys.time()
   print(paste0("iteration number: " ,i))
   print("getting district pop raster")
   #getting district pop raster
@@ -76,9 +77,11 @@ for (i in 1:51) {
   
   psu_loreto@data$stratum <- as.character(distList[i])
   assign(paste0('psu_',tolower(gsub(' ','',as.character(distList[i])))),psu_loreto)
+  end.time <- Sys.time()
   rm(psu_loreto)
   rm(list = c('raster_urban', 'strata_raster', 'clip_dist', 'pop_urban', 'total_pop', 'i','pop_df'))
-  
+  print(paste0('Time elapsed for this iteration: ', end.time - start.time))
+  rm(list = c('end.time', 'start.time'))
 }
 
 #plot(loreto.shp)
