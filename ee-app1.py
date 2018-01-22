@@ -1,6 +1,8 @@
 import ee
 from random import randint
 from ee import batch
+import pandas as pd
+import csv
 
 ## Initialize (a ee python thing)
 ee.Initialize()
@@ -56,83 +58,97 @@ classifier = ee.Classifier.randomForest(20)
 #specifying bands to use 
 bands = ['red', 'green', 'blue', 'red_m','green_m','Edge Red','NIR']
 
-lista = ee.List([])
+pylist = []
+
+text_file = open("Output.txt", "w")
+
 
 #for loop
-for i in range(999):
-	print i
-	seed = randint(0,999)
+for n in range(2):
+	print("iteration", n)
+	lista = ee.List([])
+	for i in range(10):
+		print i
+		seed = randint(0,999)
 
-	polygons = polygons.randomColumn('random',seed)
+		polygons = polygons.randomColumn('random',seed)
 
-	regionsOfInterest = image.select(bands).sampleRegions(polygons,['class', 'random'],2)
+		regionsOfInterest = image.select(bands).sampleRegions(polygons,['class', 'random'],2)
 
-	training1 = regionsOfInterest.filterMetadata('random', 'less_than', 0.8).filterMetadata('random', 'not_less_than', 0)
-	testing1 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.8)
+		training1 = regionsOfInterest.filterMetadata('random', 'less_than', 0.8).filterMetadata('random', 'not_less_than', 0)
+		testing1 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.8)
 
-	trainingClassifier1 = classifier.train(training1, 'class',bands)
-	validation1 = testing1.classify(trainingClassifier1)
-	errorMatrix1 = validation1.errorMatrix('class', 'classification')
+		trainingClassifier1 = classifier.train(training1, 'class',bands)
+		validation1 = testing1.classify(trainingClassifier1)
+		errorMatrix1 = validation1.errorMatrix('class', 'classification')
 
-	#print('accuracy1: ',errorMatrix1.accuracy())
-	#print("accuracy 1 is ", errorMatrix1.accuracy())
+		#print('accuracy1: ',errorMatrix1.accuracy())
+		#print("accuracy 1 is ", errorMatrix1.accuracy())
 
 
-	training2 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.8)
-	training22 = regionsOfInterest.filterMetadata('random', 'less_than', 0.6).filterMetadata('random', 'not_less_than', 0)
-	training2 = training2.merge(training22)
-	testing2 = regionsOfInterest.filterMetadata('random', 'less_than', 0.8).filterMetadata('random', 'not_less_than', 0.6)
+		training2 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.8)
+		training22 = regionsOfInterest.filterMetadata('random', 'less_than', 0.6).filterMetadata('random', 'not_less_than', 0)
+		training2 = training2.merge(training22)
+		testing2 = regionsOfInterest.filterMetadata('random', 'less_than', 0.8).filterMetadata('random', 'not_less_than', 0.6)
 
-	trainingClassifier2 = classifier.train(training2, 'class',bands)
-	validation2 = testing2.classify(trainingClassifier2)
-	errorMatrix2 = validation2.errorMatrix('class', 'classification')
+		trainingClassifier2 = classifier.train(training2, 'class',bands)
+		validation2 = testing2.classify(trainingClassifier2)
+		errorMatrix2 = validation2.errorMatrix('class', 'classification')
 
-	#print('accuracy2: ',errorMatrix2.accuracy())
-	#print("accuracy 2 is ", errorMatrix2.accuracy())
+		#print('accuracy2: ',errorMatrix2.accuracy())
+		#print("accuracy 2 is ", errorMatrix2.accuracy())
 	
-	training3 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.6)
-	training33 = regionsOfInterest.filterMetadata('random', 'less_than', 0.4).filterMetadata('random', 'not_less_than', 0)
-	training3 = training2.merge(training33)
-	testing3 = regionsOfInterest.filterMetadata('random', 'less_than', 0.6).filterMetadata('random', 'not_less_than', 0.4)
+		training3 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.6)
+		training33 = regionsOfInterest.filterMetadata('random', 'less_than', 0.4).filterMetadata('random', 'not_less_than', 0)
+		training3 = training2.merge(training33)
+		testing3 = regionsOfInterest.filterMetadata('random', 'less_than', 0.6).filterMetadata('random', 'not_less_than', 0.4)
 
-	trainingClassifier3 = classifier.train(training3, 'class',bands)
-	validation3 = testing3.classify(trainingClassifier3)
-	errorMatrix3 = validation3.errorMatrix('class', 'classification')
+		trainingClassifier3 = classifier.train(training3, 'class',bands)
+		validation3 = testing3.classify(trainingClassifier3)
+		errorMatrix3 = validation3.errorMatrix('class', 'classification')
 
-	#print('accuracy3: ',errorMatrix3.accuracy())
-	#print("accuracy 3 is ", errorMatrix3.accuracy())
+		#print('accuracy3: ',errorMatrix3.accuracy())
+		#print("accuracy 3 is ", errorMatrix3.accuracy())
 
-	training4 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.4)
-	training44 = regionsOfInterest.filterMetadata('random', 'less_than', 0.2).filterMetadata('random', 'not_less_than', 0)
-	training4 = training4.merge(training44)
-	testing4 = regionsOfInterest.filterMetadata('random', 'less_than', 0.4).filterMetadata('random', 'not_less_than', 0.2)
+		training4 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.4)
+		training44 = regionsOfInterest.filterMetadata('random', 'less_than', 0.2).filterMetadata('random', 'not_less_than', 0)
+		training4 = training4.merge(training44)
+		testing4 = regionsOfInterest.filterMetadata('random', 'less_than', 0.4).filterMetadata('random', 'not_less_than', 0.2)
 
-	trainingClassifier4 = classifier.train(training4, 'class',bands)
-	validation4 = testing4.classify(trainingClassifier4)
-	errorMatrix4 = validation4.errorMatrix('class', 'classification')
+		trainingClassifier4 = classifier.train(training4, 'class',bands)
+		validation4 = testing4.classify(trainingClassifier4)
+		errorMatrix4 = validation4.errorMatrix('class', 'classification')
 
-	#print('accuracy4: ',errorMatrix4.accuracy())
-	#print("accuracy 4 is ", errorMatrix4.accuracy())
+		#print('accuracy4: ',errorMatrix4.accuracy())
+		#print("accuracy 4 is ", errorMatrix4.accuracy())
 
-	training5 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.2)
-	testing5 = regionsOfInterest.filterMetadata('random', 'less_than', 0.2).filterMetadata('random', 'not_less_than', 0)
+		training5 = regionsOfInterest.filterMetadata('random', 'less_than', 1).filterMetadata('random', 'not_less_than', 0.2)
+		testing5 = regionsOfInterest.filterMetadata('random', 'less_than', 0.2).filterMetadata('random', 'not_less_than', 0)
 
-	trainingClassifier5 = classifier.train(training5, 'class',bands)
-	validation5 = testing5.classify(trainingClassifier5)
-	errorMatrix5 = validation5.errorMatrix('class', 'classification')
+		trainingClassifier5 = classifier.train(training5, 'class',bands)
+		validation5 = testing5.classify(trainingClassifier5)
+		errorMatrix5 = validation5.errorMatrix('class', 'classification')
 
-	#print('accuracy5: ',errorMatrix5.accuracy())
-	print("accuracy 5 is ", errorMatrix5.accuracy().getInfo())
+		#print('accuracy5: ',errorMatrix5.accuracy())
+		#print("accuracy 5 is ", errorMatrix5.accuracy().getInfo())
 
-	suma = ee.Number(errorMatrix1.accuracy()).add(ee.Number(errorMatrix2.accuracy())).add(ee.Number(errorMatrix3.accuracy())).add(ee.Number(errorMatrix4.accuracy())).add(ee.Number(errorMatrix5.accuracy()))
-	mean = suma.divide(5)
-	lista = lista.insert(i,mean)
+		suma = ee.Number(errorMatrix1.accuracy()).add(ee.Number(errorMatrix2.accuracy())).add(ee.Number(errorMatrix3.accuracy())).add(ee.Number(errorMatrix4.accuracy())).add(ee.Number(errorMatrix5.accuracy()))
+		mean = suma.divide(5)
+		lista = lista.insert(i,mean)
 
-lista = lista
+	lista = lista.getInfo()
+	print(lista)
+	pylist.append(lista)
+print(pylist)
 
-	
-out = batch.Export.table.toDrive(lista, description='lista_test_app1')
-process = batch.Task.start(out)
+for item in pylist:
+  text_file.write("%s\n" % item)
+
+text_file.close()
+#df = DataFrame(lista, columns = pts[0])
+#df.to_csv('~/Desktop/test.csv')
+#out = batch.Export.table.toDrive(lista, description='lista_test_app1')
+#process = batch.Task.start(out)
 
 
 
