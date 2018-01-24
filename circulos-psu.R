@@ -58,13 +58,22 @@ for (i in 1:51) {
   rm(strata_shape)
   print("grdsample")
   #grdsample
+  if (total_pop/500 < 1){
+    hh_per_stratum = 2
+    hh_per_urban = 1
+    hh_per_rural = 1
+  } else {
+    hh_per_stratum = round(total_pop/500)
+    hh_per_urban = round(hh_per_stratum * loreto.pop$urb.ratio[i])
+    hh_per_urban = round(hh_per_stratum * (1- loreto.pop$urb.ratio[i]))
+  }
   psu_loreto<-gs_sample(population_raster = clip_dist, 
                         strata_raster = strata_raster,
                         urban_raster = raster_urban,
                         cfg_desired_cell_size = NA,
-                        cfg_hh_per_stratum = 40,
-                        cfg_hh_per_urban = 10,
-                        cfg_hh_per_rural = 10,
+                        cfg_hh_per_stratum = hh_per_stratum,
+                        cfg_hh_per_urban = hh_per_urban,
+                        cfg_hh_per_rural = hh_per_rural,
                         cfg_min_pop_per_cell = clip_dist@data@min,
                         cfg_max_psu_size = 10, 
                         cfg_pop_per_psu = 500,
@@ -95,8 +104,8 @@ for(i in 2:length(all_my_shapes)){
   
 }
 rm(all_my_shapes)
-setwd('~/Dropbox/upch/Shapefiles_Project/psu_10km_2/')
-writeSpatialShape(psu_2, 'psu_10km')
+setwd('~/Dropbox/upch/Shapefiles_Project/psu_10km_3/')
+writeSpatialShape(psu, 'psu_10km')
 
 #dont run, this converts sp into spdf to write a shapefile of the buffer
 eess.id <- sapply(slot(eess.shp, "polygons"), function(x) slot(x, "ID"))
