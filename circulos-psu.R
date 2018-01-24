@@ -58,13 +58,17 @@ for (i in 1:51) {
   rm(strata_shape)
   print("grdsample")
   #grdsample
+  if (total_pop/500 < 1){
+    hh_per_stratum = 2
+  } else {hh_per_stratum = round(total_pop/500)
+  }
   psu_loreto<-gs_sample(population_raster = clip_dist, 
                         strata_raster = strata_raster,
                         urban_raster = raster_urban,
                         cfg_desired_cell_size = NA,
-                        cfg_hh_per_stratum = 40,
-                        cfg_hh_per_urban = 10,
-                        cfg_hh_per_rural = 10,
+                        cfg_hh_per_stratum = hh_per_stratum,
+                        cfg_hh_per_urban = 1,
+                        cfg_hh_per_rural = 1,
                         cfg_min_pop_per_cell = clip_dist@data@min,
                         cfg_max_psu_size = 10, 
                         cfg_pop_per_psu = 500,
@@ -79,7 +83,7 @@ for (i in 1:51) {
   assign(paste0('psu_',tolower(gsub(' ','',as.character(distList[i])))),psu_loreto)
   end.time <- Sys.time()
   rm(psu_loreto)
-  rm(list = c('raster_urban', 'strata_raster', 'clip_dist', 'pop_urban', 'total_pop', 'i','pop_df'))
+  rm(list = c('raster_urban', 'strata_raster', 'clip_dist', 'pop_urban', 'total_pop', 'i','pop_df','hh_per_stratum'))
   print(paste0('Time elapsed for this iteration: ', end.time - start.time))
   rm(list = c('end.time', 'start.time'))
 }
@@ -96,7 +100,7 @@ for(i in 2:length(all_my_shapes)){
 }
 rm(all_my_shapes)
 setwd('~/Dropbox/upch/Shapefiles_Project/psu_10km_2/')
-writeSpatialShape(psu_2, 'psu_10km')
+writeSpatialShape(psu, 'psu_10km')
 
 #dont run, this converts sp into spdf to write a shapefile of the buffer
 eess.id <- sapply(slot(eess.shp, "polygons"), function(x) slot(x, "ID"))
