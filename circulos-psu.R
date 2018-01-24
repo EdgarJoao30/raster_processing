@@ -88,7 +88,7 @@ for (i in 1:51) {
   assign(paste0('psu_',tolower(gsub(' ','',as.character(distList[i])))),psu_loreto)
   end.time <- Sys.time()
   rm(psu_loreto)
-  rm(list = c('raster_urban', 'strata_raster', 'clip_dist', 'pop_urban', 'total_pop', 'i','pop_df'))
+  rm(list = c('raster_urban', 'strata_raster', 'clip_dist', 'pop_urban', 'total_pop', 'i','pop_df','hh_per_stratum'))
   print(paste0('Time elapsed for this iteration: ', end.time - start.time))
   rm(list = c('end.time', 'start.time'))
 }
