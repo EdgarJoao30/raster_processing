@@ -68,6 +68,7 @@ for n in range(100):
 	print("iteration", n)
 	lista = ee.List([])
 	for i in range(10):
+		
 		print i
 		seed = randint(0,999)
 
@@ -81,7 +82,7 @@ for n in range(100):
 		trainingClassifier1 = classifier.train(training1, 'class',bands)
 		validation1 = testing1.classify(trainingClassifier1)
 		errorMatrix1 = validation1.errorMatrix('class', 'classification')
-                lista = lista.insert(i,errorMatrix1.consumersAccuracy())
+                lista = lista.insert(0,errorMatrix1.consumersAccuracy())
 		#print('accuracy1: ',errorMatrix1.accuracy())
 		#print("accuracy 1 is ", errorMatrix1.accuracy())
 
@@ -94,7 +95,7 @@ for n in range(100):
 		trainingClassifier2 = classifier.train(training2, 'class',bands)
 		validation2 = testing2.classify(trainingClassifier2)
 		errorMatrix2 = validation2.errorMatrix('class', 'classification')
-                lista = lista.insert(i,errorMatrix2.consumersAccuracy())
+                lista = lista.insert(0,errorMatrix2.consumersAccuracy())
 		#print('accuracy2: ',errorMatrix2.accuracy())
 		#print("accuracy 2 is ", errorMatrix2.accuracy())
 	
@@ -106,7 +107,7 @@ for n in range(100):
 		trainingClassifier3 = classifier.train(training3, 'class',bands)
 		validation3 = testing3.classify(trainingClassifier3)
 		errorMatrix3 = validation3.errorMatrix('class', 'classification')
-                lista = lista.insert(i,errorMatrix3.consumersAccuracy())
+                lista = lista.insert(0,errorMatrix3.consumersAccuracy())
 		#print('accuracy3: ',errorMatrix3.accuracy())
 		#print("accuracy 3 is ", errorMatrix3.accuracy())
 
@@ -118,7 +119,7 @@ for n in range(100):
 		trainingClassifier4 = classifier.train(training4, 'class',bands)
 		validation4 = testing4.classify(trainingClassifier4)
 		errorMatrix4 = validation4.errorMatrix('class', 'classification')
-                lista = lista.insert(i,errorMatrix4.consumersAccuracy())
+                lista = lista.insert(0,errorMatrix4.consumersAccuracy())
 		#print('accuracy4: ',errorMatrix4.accuracy())
 		#print("accuracy 4 is ", errorMatrix4.accuracy())
 
@@ -128,25 +129,24 @@ for n in range(100):
 		trainingClassifier5 = classifier.train(training5, 'class',bands)
 		validation5 = testing5.classify(trainingClassifier5)
 		errorMatrix5 = validation5.errorMatrix('class', 'classification')
-                lista = lista.insert(i,errorMatrix5.consumersAccuracy())
+                lista = lista.insert(0,errorMatrix5.consumersAccuracy())
 		#print('accuracy5: ',errorMatrix5.accuracy())
 		#print("accuracy 5 is ", errorMatrix5.accuracy().getInfo())
-
 		
-
-
-        lista = lista.getInfo()
+	lista = lista.getInfo()
 	print lista
 
         for value in lista:
-                text_file.write("%s\n" % value)
+               	text_file.write("%s\n" % value)
+
+
+        
+
 
 	
 
 text_file.close()
-#df = DataFrame(lista, columns = pts[0])df.to_csv('~/Desktop/test.csv')
-#out = batch.Export.table.toDrive(lista, description='lista_test_app1')
-#process = batch.Task.start(out)
+
 
 
 
